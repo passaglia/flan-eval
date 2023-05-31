@@ -4,6 +4,7 @@ import bbh
 import crass
 import drop
 import mmlu
+import jcqa
 from human_eval.main import main as humaneval
 
 
@@ -14,6 +15,7 @@ def main(task_name: str, **kwargs):
         drop=drop.main,
         humaneval=humaneval,
         crass=crass.main,
+        jcqa=jcqa.main
     )
 
     if task_name == "all":

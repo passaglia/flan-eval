@@ -163,6 +163,11 @@ class LlamaModel(SeqToSeqModel):
     def load(self):
         if self.tokenizer is None:
             self.tokenizer = LlamaTokenizer.from_pretrained(self.model_path)
+            # Set the pad token to allow batched inference
+            if not self.tokenizer.pad_token_id:
+                print("Setting pad token to 0")
+                self.tokenizer.pad_token_id = 0
+            self.tokenizer.padding_side = "left"
         if self.model is None:
             args = {}
             if self.load_8bit:
@@ -173,6 +178,8 @@ class LlamaModel(SeqToSeqModel):
             self.model.eval()
             if not self.load_8bit:
                 self.model.to(self.device)
+                
+                
 
     def run(self, prompt: str, **kwargs) -> str:
         if self.use_template:
