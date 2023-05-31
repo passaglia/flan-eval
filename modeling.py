@@ -179,8 +179,6 @@ class LlamaModel(SeqToSeqModel):
             if not self.load_8bit:
                 self.model.to(self.device)
                 
-                
-
     def run(self, prompt: str, **kwargs) -> str:
         if self.use_template:
             template = (
