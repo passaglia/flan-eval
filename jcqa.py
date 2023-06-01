@@ -116,8 +116,8 @@ def main(
     if args.batch_size == 1:
         for i in range(len(test_df)):
             print(f"{i}/{len(test_df)}")
-            result = model.run(test_df[i]["prompt"])
-            cors.append(int(result == get_choices()[test_df[i]["label"]]))
+            result = model.run(test_df.iloc[i]["prompt"])
+            cors.append(int(result == get_choices()[test_df.iloc[i]["label"]]))
     else:
         data = datasets.Dataset.from_pandas(
             test_df.apply(lambda x: tokenize_data(x, model), axis=1),
@@ -136,9 +136,9 @@ def main(
 
         device = "cuda"
 
-        choice_token_ids = model.tokenizer.encode(
-            list(get_choices()), add_special_tokens=False
-        )
+        choice_token_ids = [token for choice in get_choices()for token in model.tokenizer.encode(choice, add_special_tokens=False)]
+
+        assert(len(choice_token_ids) == len(get_choices()))
 
         for batch_num, batch in enumerate(dataloader):
             print(f"batch {batch_num}/{len(dataloader)}")
